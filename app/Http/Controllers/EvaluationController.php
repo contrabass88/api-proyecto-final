@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UserController
+class EvaluationController
 {
     /**
      * Display a listing of the resource.

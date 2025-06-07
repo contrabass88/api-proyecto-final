@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class EnrollmentController
+class UserController
 {
     /**
      * Display a listing of the resource.
