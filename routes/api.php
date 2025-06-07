@@ -9,6 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('get-categories', [CategoryController::class, 'index']);
-//Route::post('create-category', [CategoryController::class, 'store']);
-//Route::put('update-category/{id}', [CategoryController::class, 'update']);
-//Route::delete('delete-category/{id}', [CategoryController::class, 'destroy']);
+Route::post('create-category', [CategoryController::class, 'store']);
+Route::put('update-category/{id}', [CategoryController::class, 'update']);
+Route::delete('delete-category/{id}', [CategoryController::class, 'destroy']);
+
