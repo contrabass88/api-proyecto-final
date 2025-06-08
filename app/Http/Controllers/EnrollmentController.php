@@ -2,47 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 
-class EnrollmentController
+class EnrollmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // GET /api/enrollments
     public function index()
     {
-        //
+        $enrollments = Enrollment::with(['user', 'course'])->get();
+
+        return response()->json($enrollments);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // POST /api/enrollments
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'course_id' => 'required|exists:courses,id',
+            'enrolled_at' => 'nullable|date',
+        ]);
+
+        $enrollment = Enrollment::create([
+            'user_id' => $request->user_id,
+            'course_id' => $request->course_id,
+            'enrolled_at' => $request->enrolled_at ?? now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Matrícula registrada correctamente.',
+            'data' => $enrollment
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // PUT /api/enrollments/{id}
+    public function update(Request $request, $id)
     {
-        //
+        $enrollment = Enrollment::findOrFail($id);
+
+        $enrollment->update([
+            'user_id' => $request->user_id,
+            'course_id' => $request->course_id,
+            'enrolled_at' => $request->enrolled_at,
+        ]);
+
+        return response()->json([
+            'message' => 'Matrícula actualizada correctamente.',
+            'data' => $enrollment
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // DELETE /api/enrollments/{id}
+    public function destroy($id)
     {
-        //
-    }
+        $enrollment = Enrollment::findOrFail($id);
+        $enrollment->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'message' => 'Matrícula eliminada correctamente.'
+        ]);
     }
 }
