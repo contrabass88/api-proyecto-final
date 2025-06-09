@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
+use App\Http\Requests\EvaluationRequest;
 
 class EvaluationController extends Controller
 {
@@ -12,19 +13,13 @@ class EvaluationController extends Controller
         return response()->json(Evaluation::with('enrollment')->get());
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'enrollment_id' => 'required|exists:enrollments,id',
-            'score' => 'required|numeric|min:0|max:100',
-            'feedback' => 'nullable|string',
-            'evaluated_at' => 'nullable|date'
-        ]);
 
-        $evaluation = Evaluation::create($validated);
+    public function store(EvaluationRequest $request)
+    {
+        $evaluation = Evaluation::create($request->validated());
 
         return response()->json([
-            'message' => 'Evaluación registrada correctamente.',
+            'message' => 'Evaluación guardada correctamente.',
             'data' => $evaluation
         ]);
     }

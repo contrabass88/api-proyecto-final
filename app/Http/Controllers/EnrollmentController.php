@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use App\Http\Requests\EnrollmentRequest;
+
 
 class EnrollmentController extends Controller
 {
@@ -16,25 +18,16 @@ class EnrollmentController extends Controller
     }
 
     // POST /api/enrollments
-    public function store(Request $request)
+    public function store(EnrollmentRequest $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'course_id' => 'required|exists:courses,id',
-            'enrolled_at' => 'nullable|date',
-        ]);
-
-        $enrollment = Enrollment::create([
-            'user_id' => $request->user_id,
-            'course_id' => $request->course_id,
-            'enrolled_at' => $request->enrolled_at ?? now(),
-        ]);
+        $enrollment = Enrollment::create($request->validated());
 
         return response()->json([
-            'message' => 'Matrícula registrada correctamente.',
+            'message' => 'Inscripción realizada correctamente.',
             'data' => $enrollment
         ]);
     }
+
 
     // PUT /api/enrollments/{id}
     public function update(Request $request, $id)

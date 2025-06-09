@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Http\Requests\CourseRequest;
 
 class CourseController extends Controller
 {
@@ -27,16 +28,9 @@ class CourseController extends Controller
     }
 
     // POST /api/create-course
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:150',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id',
-            'created_by' => 'required|exists:users,id',
-        ]);
-
-        $course = Course::create($request->all());
+        $course = Course::create($request->validated());
 
         return response()->json([
             'message' => 'Curso creado correctamente.',
