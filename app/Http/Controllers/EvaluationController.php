@@ -2,47 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evaluation;
 use Illuminate\Http\Request;
 
-class EvaluationController
+class EvaluationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(Evaluation::with('enrollment')->get());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'enrollment_id' => 'required|exists:enrollments,id',
+            'score' => 'required|numeric|min:0|max:100',
+            'feedback' => 'nullable|string',
+            'evaluated_at' => 'nullable|date'
+        ]);
+
+        $evaluation = Evaluation::create($validated);
+
+        return response()->json([
+            'message' => 'Evaluación registrada correctamente.',
+            'data' => $evaluation
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $evaluation = Evaluation::findOrFail($id);
+
+        $validated = $request->validate([
+            'score' => 'sometimes|numeric|min:0|max:100',
+            'feedback' => 'nullable|string',
+            'evaluated_at' => 'nullable|date'
+        ]);
+
+        $evaluation->update($validated);
+
+        return response()->json([
+            'message' => 'Evaluación actualizada correctamente.',
+            'data' => $evaluation
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $evaluation = Evaluation::findOrFail($id);
+        $evaluation->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['message' => 'Evaluación eliminada correctamente.']);
     }
 }

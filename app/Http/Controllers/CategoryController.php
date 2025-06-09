@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+
 
 
 class CategoryController extends Controller
@@ -26,18 +28,16 @@ class CategoryController extends Controller
     }
 
     // POST /api/categories
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $category = Category::create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $category = Category::create($request->validated());
 
         return response()->json([
-            'message' => 'Categoría creada correctamente',
+            'message' => 'Categoría creada correctamente.',
             'data' => $category
         ]);
     }
+
 
     // PUT /api/categories/{id}
     public function update(Request $request, $id)
