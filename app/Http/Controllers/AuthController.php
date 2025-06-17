@@ -65,4 +65,16 @@ class AuthController extends Controller
             'message' => 'Sesión cerrada correctamente'
         ]);
     }
+
+    public function getUserWithRole(Request $request)
+    {
+        $user = $request->user();
+
+        $user->load('role');
+
+        return response()->json([
+            'user' => $user,
+            'message' => 'Información del usuario y su rol obtenida correctamente.'
+        ]);
+    }
 }

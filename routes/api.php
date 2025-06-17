@@ -49,4 +49,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+
+    // Ruta para obtener el usuario y su rol (protegida por auth:sanctum)
+    Route::get('/user-with-role', [AuthController::class, 'getUserWithRole']);
 });
