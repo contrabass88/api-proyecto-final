@@ -43,7 +43,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // ------------------
 // Rutas protegidas por Sanctum
 // ------------------
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','role:admin'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
@@ -53,4 +53,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Ruta para obtener el usuario y su rol (protegida por auth:sanctum)
     Route::get('/user-with-role', [AuthController::class, 'getUserWithRole']);
+
 });
