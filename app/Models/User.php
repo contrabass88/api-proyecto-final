@@ -35,9 +35,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // ¡CORRECCIÓN AQUÍ! Cambiado de "rol_id" a "role_id"
     protected $attributes = [
-        "role_id" => 2, // 2 = student por defecto, ahora con el nombre de columna correcto
+        "role_id" => 2,
     ];
 
     /**

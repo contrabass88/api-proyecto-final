@@ -77,4 +77,21 @@ class AuthController extends Controller
             'message' => 'Información del usuario y su rol obtenida correctamente.'
         ]);
     }
+
+    public function listUsers()
+    {
+        $users = User::with('role')->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role->description ?? 'Sin rol',
+            ];
+        });
+
+        return response()->json([
+            'message' => 'Listado de usuarios',
+            'data' => $users
+        ]);
+    }
 }
